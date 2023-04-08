@@ -1,9 +1,16 @@
+/**
+ * A reference to the canvas object
+ */
 const canvas = document.getElementById("canvas");
 
-// Get context
+/**
+ * Canvas context
+ */
 const ctx = canvas.getContext("2d");
 
-// Have canvas resize
+/**
+ * Runs upon resizing canvas.
+ */
 function onWindowResize() {
 	let minDimension = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
 	canvas.width = minDimension;
@@ -12,13 +19,22 @@ function onWindowResize() {
 window.addEventListener("resize", onWindowResize);
 onWindowResize();
 
-// Define a basic mouse structure
+/**
+ * A basic structure to hold mouse position
+ */
 const mouse = {
 	x: canvas.height / 2,
 	y: canvas.height / 2,
 }
 
-// return complex number -2 < z < +2  from screen coordinates. 
+
+
+/**
+ * Converts screen coordinates to a complex number
+ * @param {number} xPos x screen coordinate
+ * @param {number} yPos y screen coordinate
+ * @returns complex number
+ */
 function convertFromScreenCoordinates(xPos, yPos) {
 	let minDimension = canvas.width;
 	let result = {};
@@ -26,8 +42,12 @@ function convertFromScreenCoordinates(xPos, yPos) {
 	result.y = 2 - yPos / minDimension * 4;
 	return result;
 }
-
-// return  screen coordinates from complex number -2 < z < +2  from
+/**
+ * return  screen coordinates from complex number
+ * @param {number} xC real part
+ * @param {number} yC imaginar part
+ * @returns screen coordinates object
+ */
 function convertToScreenCoordinates(xC, yC) {
 	let minDimension = canvas.width;
 	let result = {};
@@ -36,12 +56,23 @@ function convertToScreenCoordinates(xC, yC) {
 	return result;
 }
 
+/**
+ * Simple class for complex numbers.  The full range
+ * of operations for complex numbers is not implemented
+ * here.  Apart from the constructur, one method is implemented
+ * to create the next element in the reverse iteration.
+ */
 class Complex {
 	constructor(real, imag) {
 		this.real = real;
 		this.imag = imag;
 	}
 
+	/**
+	 * Finds the next number in the reverse iteration sequence.
+	 * @param {object} c The complex constant in the formula
+	 * @returns next number in sequence.
+	 */
 	next(c) {
 		let tmp = {};
 
@@ -58,19 +89,28 @@ class Complex {
 		return new Complex(randPlusMinus * result.real, randPlusMinus * result.imag);
 	}
 };
-
+/**
+ * Holds a set of points in the Julia set based on reverse iteration.
+ */
 class JuliaSetPoints {
+	/**
+	 * Creates an array of complex numbers that form the sequence.
+	 * @param {*} c The complex constant C in the formula
+	 */
 	constructor(c) {
 		this.z = new Complex(1,1);
 		this.c = c;
 		this.points = [];
 		let z = this.z;
-		for (let i = 0; i < 10000; ++i) {
+		for (let i = 0; i < 30000; ++i) {
 			z = z.next(c);	
 			this.points.push( z );
 		}
 	}
 
+	/**
+	 * Draw the sequence of points on the screen
+	 */
 	draw() {
 		//ctx.fillStyle = "white";
 		ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
@@ -86,11 +126,17 @@ class JuliaSetPoints {
 	}
 }
 
+/**	
+ * Update mouse pointer when mouse moves.
+ */
 canvas.addEventListener("mousemove", function(event) {
 	mouse.x = event.x;
 	mouse.y = event.y;
 }) 
 
+/**
+ * A class representing the pointer on screen
+ */
 class Pointer {
 	constructor() {
 		this.x = mouse.x;
@@ -98,45 +144,61 @@ class Pointer {
 		this.size = 10;
 	}
 
+	/**
+	 * Update position of pointer based on mouse position
+	 */
 	update() {
 		this.x = mouse.x;
 		this.y = mouse.y;
-		
 	}
 	
+	/**
+	 * Draw the pointer
+	 */
 	draw() {
 		ctx.fillStyle = "blue";
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
 	    ctx.fill();
-		
-		
-		
 	}
 }
 
+/**
+ * Update the numberic disply in top right corner.
+ */
 function numericDisplayDraw() {
 	let result = convertFromScreenCoordinates(mouse.x, mouse.y)
 	document.getElementById("cx").innerHTML = result.x.toFixed(1);
 	document.getElementById("cy").innerHTML = result.y.toFixed(1);
 }
 
+// Create the pointer
 let pointer = new Pointer();
 
 
+/**
+ * The main "game loop". On each cycle update the necessary elements
+ */
 function animate() {
 	ctx.clearRect(0,0, canvas.width, canvas.height);
+
+	// Update screen elements
 	numericDisplayDraw();
 	pointer.update();
 	pointer.draw();
 
+	// Get the complex constant based on mouse position.
 	let c = convertFromScreenCoordinates(mouse.x, mouse.y);
+	
+	// Create a set of points using inverse iteration
 	let juliaSet = new JuliaSetPoints(new Complex(c.x, c.y ));
+	
+	// Draw the points
 	juliaSet.draw();
-
-
-
+	
+	// Request new frame.
 	requestAnimationFrame(animate);
 }
 
+// Start the animation
 animate();

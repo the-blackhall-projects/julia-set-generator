@@ -1,4 +1,4 @@
-* Global default styles */
+/* Global default styles */
 
 * {
 	margin: 0;
@@ -7,6 +7,7 @@
 	box-sizing: border-box;
 }
 
+/* Format canvas area */
 #canvas {
 	position: absolute;
 	background: black;
@@ -14,9 +15,9 @@
 	left: 0;
 }
 
+/* Style numeric display area */
 #display-area {
 	position:absolute;
 	color:white;
-	height:10;
 }
 

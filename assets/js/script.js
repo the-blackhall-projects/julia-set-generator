@@ -1,23 +1,26 @@
 const canvas = document.getElementById("canvas");
 
-// Have canvas fill screen
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
 
 // Get context
 const ctx = canvas.getContext("2d");
 
-
-window.addEventListener("resize", function() {
+// Have canvas resize
+function onWindowResize() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
-})
+}
+window.addEventListener("resize", onWindowResize);
+onWindowResize();
 
 // Define a basic mouse structure
 const mouse = {
 	x: undefined,
 	y: undefined,
 }
+
+
+
 
 canvas.addEventListener("mousemove", function(event) {
 	mouse.x = event.x;
@@ -28,8 +31,6 @@ class Pointer {
 	constructor() {
 		this.x = mouse.x;
 		this.y = mouse.y;
-
-	
 		this.size = 10;
 	}
 

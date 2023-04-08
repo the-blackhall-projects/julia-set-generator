@@ -50,4 +50,9 @@ An area for displaying the generated fractal. Noet the position of the blue mous
 
 ### Validator Testing.
 
+w3.org validates HTML with no errors. 
+
+
+https://validator.w3.org/nu/?doc=https%3A%2F%2Fthe-blackhall-projects.github.io%2Fjulia-set-generator%2F
+
 

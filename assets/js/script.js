@@ -80,21 +80,15 @@ let pointer = new Pointer();
 
 function animate() {
 	ctx.clearRect(0,0, canvas.width, canvas.height);
-
 	let result = convertFromScreenCoordinates(mouse.x, mouse.y)
-	
+
 	document.getElementById("xpos").innerHTML = mouse.x;
 	document.getElementById("ypos").innerHTML = mouse.y;
 	document.getElementById("cx").innerHTML = result.x.toFixed(3);
 	document.getElementById("cy").innerHTML = result.y.toFixed(3);
-
 	let result2 = convertToScreenCoordinates(result.x, result.y)
-
-
 	document.getElementById("xpos2").innerHTML = result2.x.toFixed(3);
 	document.getElementById("ypos2").innerHTML = result2.y.toFixed(3);
-	
-	
 	pointer.update();
 	pointer.draw();
 	requestAnimationFrame(animate);

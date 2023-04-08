@@ -54,6 +54,7 @@ w3.org validates HTML with no errors.
 
 https://validator.w3.org/nu/?doc=https%3A%2F%2Fthe-blackhall-projects.github.io%2Fjulia-set-generator%2F
 
+![HTML Validation](https://github.com/the-blackhall-projects/julia-set-generator/blob/main/assets/images/html-validation.png?raw=true)
 
 
 w3.org also validates CSS with no errors.

@@ -1,2 +1,4 @@
-let body = document.getElementsByTagName("body")[0];
-body.style.backgroundColor = "red";
+const canvas = document.getElementById("canvas");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;

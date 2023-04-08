@@ -88,7 +88,7 @@ class Complex {
 		result.imag = (tmp.imag / Math.abs(tmp.imag)) * Math.sqrt((magnitude - tmp.real)/2);
 		return new Complex(randPlusMinus * result.real, randPlusMinus * result.imag);
 	}
-};
+}
 /**
  * Holds a set of points in the Julia set based on reverse iteration.
  */
@@ -167,7 +167,7 @@ class Pointer {
  * Update the numberic disply in top right corner.
  */
 function numericDisplayDraw() {
-	let result = convertFromScreenCoordinates(mouse.x, mouse.y)
+	let result = convertFromScreenCoordinates(mouse.x, mouse.y);
 	document.getElementById("cx").innerHTML = result.x.toFixed(1);
 	document.getElementById("cy").innerHTML = result.y.toFixed(1);
 }

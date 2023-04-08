@@ -1,5 +1,12 @@
 # Julia setgenerator
 ## Generates a Julia set on the HTML5 Canvas through inverse iteration.
+
+### Repository and Live Site Locations
+
+Repository: https://github.com/the-blackhall-projects/julia-set-generator
+
+Live site: https://the-blackhall-projects.github.io/julia-set-generator/
+
 ### Introduction
 A Julia set is a fractal set in the complex plane that is defined by the behavior of a complex function at every point. To create a Julia set, you start with a complex number and plug it into a complex function repeatedly, generating a sequence of numbers. Depending on the function and the initial complex number, the sequence may either converge to a fixed point or diverge to infinity. The Julia set is the set of complex numbers for which the sequence of iterates neither converges nor diverges, but instead forms a chaotic, self-similar pattern. The set is often depicted graphically as a black-and-white image, where black represents points that belong to the Julia set, and white represents points that do not. Julia sets are known for their intricate and fascinating geometric patterns, and they have been studied extensively in mathematics, physics, and computer science.
 ### Inverse Iteration
@@ -20,5 +27,27 @@ The constant c in the formula, determines which Julia set is generated and the c
 #### Title and formula area.
 At the top of the screen we have a title: Julia Set Generator and the formula upon which the set is based.  <img src="https://latex.codecogs.com/svg.latex?\ z_{n+1}=z_{n}^{2}+c" title="formula" />, where c is a complex constant.
 #### Numeric display area.
+This area displays the value of the complex number c in the formula and is updated based on mouse position.
+
+![Numeric Display Area](https://github.com/the-blackhall-projects/julia-set-generator/blob/main/assets/images/numeric-display-area.png?raw=true)
+
+#### Mouse Pointer
+
+A small blue disk which moves wth the mouse. 
+
+![Mouse Pointer](https://github.com/the-blackhall-projects/julia-set-generator/blob/main/assets/images/pointer.png?raw=true)
+
+#### Fractal Area
+An area for displaying the generated fractal. Noet the position of the blue mouse pointer in the upper left. 
+
+![Fractal Area](https://github.com/the-blackhall-projects/julia-set-generator/blob/main/assets/images/fractal-area.png?raw=true)
+
+#### Features left to implement
+
+* A forward iteration version of the Julia Set generation.
+* A means of saving the generated fractal.
+* More information about the Julia Set for the user.
+
+### Validator Testing.
 
 

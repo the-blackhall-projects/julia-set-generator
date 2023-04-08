@@ -7,6 +7,12 @@ canvas.height = window.innerHeight;
 // Get context
 const ctx = canvas.getContext("2d");
 
+
+window.addEventListener("resize", function() {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+})
+
 // Define a basic mouse structure
 const mouse = {
 	x: undefined,

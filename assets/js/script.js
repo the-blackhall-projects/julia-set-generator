@@ -36,6 +36,56 @@ function convertToScreenCoordinates(xC, yC) {
 	return result;
 }
 
+class Complex {
+	constructor(real, imag) {
+		this.real = real;
+		this.imag = imag;
+	}
+
+	next(c) {
+		let tmp = {};
+
+		let result = {};
+
+		tmp.real = this.real - c.real;
+		tmp.imag = this.imag - c.imag;
+
+		let magnitude = Math.sqrt(tmp.real*tmp.real + tmp.imag*tmp.imag);
+		let randPlusMinus = Math.random() > 0.5 ? 1 : -1;
+		
+		result.real = Math.sqrt((magnitude + tmp.real)/2);
+		result.imag = (tmp.imag / Math.abs(tmp.imag)) * Math.sqrt((magnitude - tmp.real)/2);
+		return new Complex(randPlusMinus * result.real, randPlusMinus * result.imag);
+	}
+};
+
+class JuliaSetPoints {
+	constructor(c) {
+		this.z = new Complex(1,1);
+		this.c = c;
+		this.points = [];
+		let z = this.z;
+		for (let i = 0; i < 10000; ++i) {
+			z = z.next(c);	
+			this.points.push( z );
+		}
+	}
+
+	draw() {
+		//ctx.fillStyle = "white";
+		ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+
+		for (let point of this.points) {
+			let re = point.real;
+			let imag = point.imag;
+			let screenCoords = convertToScreenCoordinates(re, imag);
+			ctx.beginPath();
+			ctx.arc(screenCoords.x, screenCoords.y, 1, 0, Math.PI * 2);
+	    	ctx.fill();
+		}
+	}
+}
+
 canvas.addEventListener("mousemove", function(event) {
 	mouse.x = event.x;
 	mouse.y = event.y;
@@ -60,27 +110,16 @@ class Pointer {
 		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
 	    ctx.fill();
 		
-		let result = convertFromScreenCoordinates(this.x, this.y);
-		console.log("complex:", result.x, result.y );
-		let result2 = convertToScreenCoordinates(result.x, result.y);
-		console.log(canvas.width, canvas.height);
-		console.log("normal:",result2.x, result2.y);
+		
 		
 	}
 }
 
 function numericDisplayDraw() {
 	let result = convertFromScreenCoordinates(mouse.x, mouse.y)
-	document.getElementById("xpos").innerHTML = mouse.x;
-	document.getElementById("ypos").innerHTML = mouse.y;
-	document.getElementById("cx").innerHTML = result.x.toFixed(3);
-	document.getElementById("cy").innerHTML = result.y.toFixed(3);
-	let result2 = convertToScreenCoordinates(result.x, result.y)
-	document.getElementById("xpos2").innerHTML = result2.x.toFixed(3);
-	document.getElementById("ypos2").innerHTML = result2.y.toFixed(3);
+	document.getElementById("cx").innerHTML = result.x.toFixed(1);
+	document.getElementById("cy").innerHTML = result.y.toFixed(1);
 }
-
-
 
 let pointer = new Pointer();
 
@@ -88,9 +127,15 @@ let pointer = new Pointer();
 function animate() {
 	ctx.clearRect(0,0, canvas.width, canvas.height);
 	numericDisplayDraw();
-
 	pointer.update();
 	pointer.draw();
+
+	let c = convertFromScreenCoordinates(mouse.x, mouse.y);
+	let juliaSet = new JuliaSetPoints(new Complex(c.x, c.y ));
+	juliaSet.draw();
+
+
+
 	requestAnimationFrame(animate);
 }
 

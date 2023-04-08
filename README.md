@@ -52,7 +52,13 @@ An area for displaying the generated fractal. Noet the position of the blue mous
 
 w3.org validates HTML with no errors. 
 
-
 https://validator.w3.org/nu/?doc=https%3A%2F%2Fthe-blackhall-projects.github.io%2Fjulia-set-generator%2F
+
+
+
+w3.org also validates CSS with no errors.
+https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fthe-blackhall-projects.github.io%2Fjulia-set-generator%2F&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en
+
+
 
 

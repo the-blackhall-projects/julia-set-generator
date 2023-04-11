@@ -1,7 +1,7 @@
 # Julia setgenerator
 ## Generates a Julia set on the HTML5 Canvas through inverse iteration.
 
-### Repository and Live Site Locations
+### Repository and Live Site Locations (testing)
 
 Repository: https://github.com/the-blackhall-projects/julia-set-generator
 

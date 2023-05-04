@@ -40,10 +40,8 @@ function convertFromScreenCoordinates(xPos, yPos) {
 	let width = window.innerWidth;
 
 	let minDimension = (width < height) ? width : height;
-	let maxDimension = (width > height) ? width : height;
 
 	let result = {};
-
 	result.x = (xPos - width / 2) * 4 / minDimension ;	
 	result.y   = - (yPos - height / 2) * 4 / minDimension;
 	return result;
@@ -60,7 +58,6 @@ function convertToScreenCoordinates(xC, yC) {
 	let width = window.innerWidth;
 
 	let minDimension = (width < height) ? width : height;
-	let maxDimension = (width > height) ? width : height;
 
 	let result = {};
 	result.x = width / 2 + (xC) * minDimension / 4 ;	

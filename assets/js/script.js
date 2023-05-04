@@ -112,12 +112,20 @@ class Buffer {
 		this.length = length;
 		this.data = Array.apply(null, Array(length)).map(function () {});
 	}
-
+	/**
+	 * Inserts object in buffer
+	 * @param {object} The object to insert.
+	 */
 	insert(obj) {
 		this.data[this.head] = obj;
 		++this.head;
 		this.head = this.head % this.length;
 	}
+
+	/**
+	 * Returns the end object in the buffer.
+	 * @returns oldest object in buffer.
+	 */
 
 	get tail() {
 		let pointer = (this.head+this.length) % this.length;

@@ -17,6 +17,8 @@ function onWindowResize() {
 	canvas.height = window.innerHeight;
 }
 window.addEventListener("resize", onWindowResize);
+
+// Perform one window resize
 onWindowResize();
 
 /**

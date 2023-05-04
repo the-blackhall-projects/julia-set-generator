@@ -30,6 +30,40 @@ const mouse = {
 }
 
 /**
+ * Simple class for complex numbers.  The full range
+ * of operations for complex numbers is not implemented
+ * here.  Apart from the constructur, one method is implemented
+ * to create the next element in the reverse iteration.
+ */
+class Complex {
+	constructor(real, imag) {
+		this.real = real;
+		this.imag = imag;
+	}
+
+	/**
+	 * Finds the next number in the reverse iteration sequence.
+	 * @param {object} c The complex constant in the formula
+	 * @returns next number in sequence.
+	 */
+	next(c) {
+		let tmp = {};
+
+		let result = {};
+
+		tmp.real = this.real - c.real;
+		tmp.imag = this.imag - c.imag;
+
+		let magnitude = Math.sqrt(tmp.real*tmp.real + tmp.imag*tmp.imag);
+		let randPlusMinus = Math.random() > 0.5 ? 1 : -1;
+		
+		result.real = Math.sqrt((magnitude + tmp.real)/2);
+		result.imag = (tmp.imag / Math.abs(tmp.imag)) * Math.sqrt((magnitude - tmp.real)/2);
+		return new Complex(randPlusMinus * result.real, randPlusMinus * result.imag);
+	}
+}
+
+/**
  * Converts screen coordinates to a complex number
  * @param {number} xPos x screen coordinate
  * @param {number} yPos y screen coordinate
@@ -66,39 +100,7 @@ function convertToScreenCoordinates(xC, yC) {
 	return result;
 }
 
-/**
- * Simple class for complex numbers.  The full range
- * of operations for complex numbers is not implemented
- * here.  Apart from the constructur, one method is implemented
- * to create the next element in the reverse iteration.
- */
-class Complex {
-	constructor(real, imag) {
-		this.real = real;
-		this.imag = imag;
-	}
 
-	/**
-	 * Finds the next number in the reverse iteration sequence.
-	 * @param {object} c The complex constant in the formula
-	 * @returns next number in sequence.
-	 */
-	next(c) {
-		let tmp = {};
-
-		let result = {};
-
-		tmp.real = this.real - c.real;
-		tmp.imag = this.imag - c.imag;
-
-		let magnitude = Math.sqrt(tmp.real*tmp.real + tmp.imag*tmp.imag);
-		let randPlusMinus = Math.random() > 0.5 ? 1 : -1;
-		
-		result.real = Math.sqrt((magnitude + tmp.real)/2);
-		result.imag = (tmp.imag / Math.abs(tmp.imag)) * Math.sqrt((magnitude - tmp.real)/2);
-		return new Complex(randPlusMinus * result.real, randPlusMinus * result.imag);
-	}
-}
 
 /**
  * Fixed length circular buffer.  Once full, tail returns the oldest

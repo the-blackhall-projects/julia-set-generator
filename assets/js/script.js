@@ -12,9 +12,9 @@ const ctx = canvas.getContext("2d");
  * Runs upon resizing canvas.
  */
 function onWindowResize() {
-	let minDimension = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
-	canvas.width = minDimension;
-	canvas.height = minDimension;
+	// let minDimension = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 }
 window.addEventListener("resize", onWindowResize);
 onWindowResize();
@@ -36,7 +36,7 @@ const mouse = {
  * @returns complex number
  */
 function convertFromScreenCoordinates(xPos, yPos) {
-	let minDimension = canvas.width;
+	let minDimension = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
 	let result = {};
 	result.x = xPos / minDimension * 4 - 2;	
 	result.y = 2 - yPos / minDimension * 4;
@@ -49,7 +49,8 @@ function convertFromScreenCoordinates(xPos, yPos) {
  * @returns screen coordinates object
  */
 function convertToScreenCoordinates(xC, yC) {
-	let minDimension = canvas.width;
+	let minDimension = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+	// let minDimension = canvas.width;
 	let result = {};
 	result.x = (xC + 2) * minDimension / 4;	
 	result.y = (2 - yC) * minDimension / 4;

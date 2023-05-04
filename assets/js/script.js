@@ -237,14 +237,13 @@ let buffer = new Buffer(BUFFLEN);
  * The main "game loop". On each cycle update the necessary elements
  */
 
-let oldMouse = {
-	x : 0,
-	y : 0,
-};
 
-let mouseComplex = new Complex(oldMouse.x, oldMouse.y);
 
+let mouseComplex = new Complex(0, 0);
 let curr = new Complex(0, 0);
+
+let oldMouse = convertToScreenCoordinates(mouseComplex);
+
 // let currNum = new Complex(curr.x, curr.y);
 
 
@@ -267,31 +266,37 @@ function animate() {
 		
 		buffer.insert(oldMouse.x, oldMouse.x);
 		// Turn transparency on
-		/*
+		
 		ctx.globalAlpha = 1;
 		ctx.fillStyle = "rgba(255, 255, 255, .3)";
 		ctx.beginPath();
 		ctx.arc(oldMouse.x, oldMouse.y, 10, 1, Math.PI * 2);
 		ctx.fill();
-		*/
-		curr = convertFromScreenCoordinates(0, 0);
+		
+		// curr = convertFromScreenCoordinates(0, 0);
+
+		curr = new Complex(0,0);
 
 
 	} else {
-		console.log("stat");
 
 		mouseComplex = convertFromScreenCoordinates(oldMouse.x, oldMouse.y);
 
-		curr = curr.next(mouseComplex);
-		let point = convertToScreenCoordinates(curr);
-		buffer.insert(point.x, point.y);
+
 
 		ctx.globalAlpha = 1;
-		ctx.fillStyle = "rgba(255, 255, 255, 1)";
-		ctx.beginPath();
-		ctx.arc(point.x, point.y, 10, .01, Math.PI * 2);
-		console.log(mouseComplex.real, mouseComplex.imag, point.x, point.y);
-		ctx.fill();
+		ctx.fillStyle = "rgba(255, 255, 255, .3)";
+		for (let i = 1; i <= 100; ++i) {
+					curr = curr.next(mouseComplex);
+		let point = convertToScreenCoordinates(curr);
+		buffer.insert(point.x, point.y);
+			ctx.beginPath();
+			ctx.arc(point.x, point.y, 10, .01, Math.PI * 2);
+			ctx.fill();
+
+		}
+		
+	
 	}
 
 	// Get the complex constant based on mouse position.

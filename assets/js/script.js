@@ -29,8 +29,6 @@ const mouse = {
 	y: canvas.height / 2,
 }
 
-
-
 /**
  * Converts screen coordinates to a complex number
  * @param {number} xPos x screen coordinate
@@ -38,10 +36,16 @@ const mouse = {
  * @returns complex number
  */
 function convertFromScreenCoordinates(xPos, yPos) {
-	let minDimension = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+	let height = window.innerHeight;
+	let width = window.innerWidth;
+
+	let minDimension = (width < height) ? width : height;
+	let maxDimension = (width > height) ? width : height;
+
 	let result = {};
-	result.x = xPos / minDimension * 4 - 2;	
-	result.y = 2 - yPos / minDimension * 4;
+
+	result.x = (xPos - width / 2) * 4 / minDimension ;	
+	result.y   = - (yPos - height / 2) * 4 / minDimension;
 	return result;
 }
 /**
@@ -51,11 +55,17 @@ function convertFromScreenCoordinates(xPos, yPos) {
  * @returns screen coordinates object
  */
 function convertToScreenCoordinates(xC, yC) {
-	let minDimension = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
-	// let minDimension = canvas.width;
+
+	let height = window.innerHeight;
+	let width = window.innerWidth;
+
+	let minDimension = (width < height) ? width : height;
+	let maxDimension = (width > height) ? width : height;
+
 	let result = {};
-	result.x = (xC + 2) * minDimension / 4;	
-	result.y = (2 - yC) * minDimension / 4;
+	result.x = width / 2 + (xC) * minDimension / 4 ;	
+	result.y = height / 2 + (- yC) * minDimension / 4 ;
+
 	return result;
 }
 

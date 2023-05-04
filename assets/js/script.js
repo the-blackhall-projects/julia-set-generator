@@ -75,8 +75,11 @@ function convertFromScreenCoordinates(xPos, yPos) {
 
 	let minDimension = (width < height) ? width : height;
 	result = {}
+
+	result = new Complex()
 	result.x = (xPos - width / 2) * 4 / minDimension ;	
 	result.y   = - (yPos - height / 2) * 4 / minDimension;
+	
 	return result;
 }
 
@@ -257,6 +260,7 @@ function animate() {
 		buffer.insert(oldMouse.x, oldMouse.y);
 
 	} else {
+
 		
 
 	}

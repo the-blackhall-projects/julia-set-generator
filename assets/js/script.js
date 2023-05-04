@@ -87,8 +87,7 @@ function convertFromScreenCoordinates(xPos, yPos) {
 
 /**
  * return  screen coordinates from complex number
- * @param {number} xC real part
- * @param {number} yC imaginar part
+ * @param {Complex} point a complex number
  * @returns screen coordinates object
  */
 function convertToScreenCoordinates(point) {
@@ -177,7 +176,7 @@ class JuliaSetPoints {
 			let screenCoords = convertToScreenCoordinates(point);
 			ctx.beginPath();
 			ctx.arc(screenCoords.x, screenCoords.y, 1, 0, Math.PI * 2);
-	    	ctx.fill();
+	    	// ctx.fill();
 		}
 	}
 }
@@ -243,36 +242,66 @@ let oldMouse = {
 	y : 0,
 };
 
-let curr = convertFromScreenCoordinates(mouse.x, mouse.y);
+let mouseComplex = new Complex(oldMouse.x, oldMouse.y);
+
+let curr = new Complex(0, 0);
 // let currNum = new Complex(curr.x, curr.y);
 
+
 function animate() {
-	ctx.clearRect(0,0, canvas.width, canvas.height);
+	// ctx.clearRect(0,0, canvas.width, canvas.height);
 
 	// Update screen elements
 	numericDisplayDraw();
 	pointer.update();
-	pointer.draw();
+	// pointer.draw();
+
+	let point = {};
 
 	if (mouse.x != oldMouse.x || mouse.y != oldMouse.y) { 
+		
+		
 		oldMouse.x = mouse.x;
 		oldMouse.y = mouse.y;
-		buffer.insert(oldMouse.x, oldMouse.y);
-
-	} else {
 
 		
+		buffer.insert(oldMouse.x, oldMouse.x);
+		// Turn transparency on
+		/*
+		ctx.globalAlpha = 1;
+		ctx.fillStyle = "rgba(255, 255, 255, .3)";
+		ctx.beginPath();
+		ctx.arc(oldMouse.x, oldMouse.y, 10, 1, Math.PI * 2);
+		ctx.fill();
+		*/
+		curr = convertFromScreenCoordinates(0, 0);
 
+
+	} else {
+		console.log("stat");
+
+		mouseComplex = convertFromScreenCoordinates(oldMouse.x, oldMouse.y);
+
+		curr = curr.next(mouseComplex);
+		let point = convertToScreenCoordinates(curr);
+		buffer.insert(point.x, point.y);
+
+		ctx.globalAlpha = 1;
+		ctx.fillStyle = "rgba(255, 255, 255, 1)";
+		ctx.beginPath();
+		ctx.arc(point.x, point.y, 10, .01, Math.PI * 2);
+		console.log(mouseComplex.real, mouseComplex.imag, point.x, point.y);
+		ctx.fill();
 	}
 
 	// Get the complex constant based on mouse position.
-	let c = convertFromScreenCoordinates(mouse.x, mouse.y);
+	//let c = convertFromScreenCoordinates(mouse.x, mouse.y);
 	
 	// Create a set of points using inverse iteration
-	let juliaSet = new JuliaSetPoints(c);
+	//let juliaSet = new JuliaSetPoints(c);
 	
 	// Draw the points
-	juliaSet.draw();
+	//juliaSet.draw();
 	
 	// Request new frame.
 	requestAnimationFrame(animate);

@@ -219,7 +219,6 @@ function numericDisplayDraw() {
 // Create the pointer
 let pointer = new Pointer();
 
-
 /**
  * The main "game loop". On each cycle update the necessary elements
  */

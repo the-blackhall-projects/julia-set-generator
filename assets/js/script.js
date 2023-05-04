@@ -91,7 +91,7 @@ function convertFromScreenCoordinates(xPos, yPos) {
  * @param {number} yC imaginar part
  * @returns screen coordinates object
  */
-function convertToScreenCoordinates(xC, yC) {
+function convertToScreenCoordinates(point) {
 
 	let height = window.innerHeight;
 	let width = window.innerWidth;
@@ -99,8 +99,8 @@ function convertToScreenCoordinates(xC, yC) {
 	let minDimension = (width < height) ? width : height;
 
 	let result = {};
-	result.x = width / 2 + (xC) * minDimension / 4 ;	
-	result.y = height / 2 + (- yC) * minDimension / 4 ;
+	result.x = width / 2 + (point.real) * minDimension / 4 ;	
+	result.y = height / 2 + (- point.imag) * minDimension / 4 ;
 
 	return result;
 }
@@ -174,9 +174,7 @@ class JuliaSetPoints {
 		ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
 
 		for (let point of this.points) {
-			let re = point.real;
-			let imag = point.imag;
-			let screenCoords = convertToScreenCoordinates(re, imag);
+			let screenCoords = convertToScreenCoordinates(point);
 			ctx.beginPath();
 			ctx.arc(screenCoords.x, screenCoords.y, 1, 0, Math.PI * 2);
 	    	ctx.fill();

@@ -26,7 +26,7 @@ onWindowResize();
  */
 const mouse = {
 	x: canvas.height / 2,
-	y: canvas.height / 2,
+	y: canvas.width / 2,
 }
 
 /**
@@ -40,8 +40,7 @@ function convertFromScreenCoordinates(xPos, yPos) {
 	let width = window.innerWidth;
 
 	let minDimension = (width < height) ? width : height;
-	let result = {};
-
+	result = {}
 	result.x = (xPos - width / 2) * 4 / minDimension ;	
 	result.y   = - (yPos - height / 2) * 4 / minDimension;
 	return result;
@@ -217,11 +216,23 @@ function numericDisplayDraw() {
 }
 
 // Create the pointer
+
+const BUFFLEN = 1000;
 let pointer = new Pointer();
+let buffer = new Buffer(BUFFLEN);
 
 /**
  * The main "game loop". On each cycle update the necessary elements
  */
+
+let oldMouse = {
+	x : 0,
+	y : 0,
+};
+
+let curr = convertFromScreenCoordinates(mouse.x, mouse.y);
+let currNum = new Complex(curr.x, curr.y);
+
 function animate() {
 	ctx.clearRect(0,0, canvas.width, canvas.height);
 
@@ -229,6 +240,16 @@ function animate() {
 	numericDisplayDraw();
 	pointer.update();
 	pointer.draw();
+
+	if (mouse.x != oldMouse.x || mouse.y != oldMouse.y) { 
+		oldMouse.x = mouse.x;
+		oldMouse.y = mouse.y;
+		buffer.insert(oldMouse.x, oldMouse.y);
+
+	} else {
+		
+
+	}
 
 	// Get the complex constant based on mouse position.
 	let c = convertFromScreenCoordinates(mouse.x, mouse.y);

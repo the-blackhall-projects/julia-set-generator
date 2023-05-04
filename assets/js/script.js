@@ -77,10 +77,12 @@ function convertFromScreenCoordinates(xPos, yPos) {
 	result = {}
 
 	result = new Complex()
-	result.x = (xPos - width / 2) * 4 / minDimension ;	
-	result.y   = - (yPos - height / 2) * 4 / minDimension;
+	let x = (xPos - width / 2) * 4 / minDimension ;	
+	let y = - (yPos - height / 2) * 4 / minDimension;
+
+	retVal = new Complex(x, y);
 	
-	return result;
+	return retVal;
 }
 
 /**
@@ -224,8 +226,8 @@ class Pointer {
  */
 function numericDisplayDraw() {
 	let result = convertFromScreenCoordinates(mouse.x, mouse.y);
-	document.getElementById("cx").innerHTML = result.x.toFixed(1);
-	document.getElementById("cy").innerHTML = result.y.toFixed(1);
+	document.getElementById("cx").innerHTML = result.real.toFixed(1);
+	document.getElementById("cy").innerHTML = result.imag.toFixed(1);
 }
 
 // Create the pointer
@@ -244,7 +246,7 @@ let oldMouse = {
 };
 
 let curr = convertFromScreenCoordinates(mouse.x, mouse.y);
-let currNum = new Complex(curr.x, curr.y);
+// let currNum = new Complex(curr.x, curr.y);
 
 function animate() {
 	ctx.clearRect(0,0, canvas.width, canvas.height);
@@ -269,7 +271,7 @@ function animate() {
 	let c = convertFromScreenCoordinates(mouse.x, mouse.y);
 	
 	// Create a set of points using inverse iteration
-	let juliaSet = new JuliaSetPoints(new Complex(c.x, c.y ));
+	let juliaSet = new JuliaSetPoints(c);
 	
 	// Draw the points
 	juliaSet.draw();

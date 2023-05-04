@@ -40,12 +40,13 @@ function convertFromScreenCoordinates(xPos, yPos) {
 	let width = window.innerWidth;
 
 	let minDimension = (width < height) ? width : height;
-
 	let result = {};
+
 	result.x = (xPos - width / 2) * 4 / minDimension ;	
 	result.y   = - (yPos - height / 2) * 4 / minDimension;
 	return result;
 }
+
 /**
  * return  screen coordinates from complex number
  * @param {number} xC real part
@@ -99,6 +100,7 @@ class Complex {
 		return new Complex(randPlusMinus * result.real, randPlusMinus * result.imag);
 	}
 }
+
 /**
  * Holds a set of points in the Julia set based on reverse iteration.
  */

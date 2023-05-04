@@ -25,9 +25,10 @@ onWindowResize();
  * A basic structure to hold mouse position
  */
 const mouse = {
-	x: canvas.height / 2,
-	y: canvas.width / 2,
+	x: canvas.width / 2,
+	y: canvas.height / 2,
 }
+
 
 /**
  * Simple class for complex numbers.  The full range
@@ -287,9 +288,9 @@ function animate() {
 		ctx.globalAlpha = 1;
 		ctx.fillStyle = "rgba(255, 255, 255, .3)";
 		for (let i = 1; i <= 100; ++i) {
-					curr = curr.next(mouseComplex);
-		let point = convertToScreenCoordinates(curr);
-		buffer.insert(point.x, point.y);
+			curr = curr.next(mouseComplex);
+			let point = convertToScreenCoordinates(curr);
+			buffer.insert(point.x, point.y);
 			ctx.beginPath();
 			ctx.arc(point.x, point.y, 10, .01, Math.PI * 2);
 			ctx.fill();

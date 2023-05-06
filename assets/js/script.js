@@ -43,24 +43,72 @@ class Complex {
 	}
 
 	/**
+	 * Compute distance squared to another complex nu
+	 * @param {object} toComplexNum The other complex number 
+	 * @returns next number in sequence.
+	 */
+	distSq(num1, num2) {
+
+
+		let distReal = num1.real - num2.real;
+		let distImag = num1.imag - num2.imag;
+
+		let distRealSq = distReal * distReal;
+		let distImagImag = distImag * distImag;
+
+		return distRealSq + distImagImag;
+
+	}
+
+	magSquared(complexNum) {
+		return complexNum.real * complexNum.real +
+			complexNum.imag * complexNum.imag;
+	}
+
+	mag(complexNum) {
+		return Math.sqrt(this.magSquared(complexNum));
+	}
+
+	/**
 	 * Finds the next number in the reverse iteration sequence.
 	 * @param {object} c The complex constant in the formula
 	 * @returns next number in sequence.
 	 */
 	next(c) {
-		let tmp = {};
+		let diff = {};
 
-		let result = {};
+		let result1 = {};
+		let result2 = {};
 
-		tmp.real = this.real - c.real;
-		tmp.imag = this.imag - c.imag;
+		diff.real = this.real - c.real;
+		diff.imag = this.imag - c.imag;
 
-		let magnitude = Math.sqrt(tmp.real*tmp.real + tmp.imag*tmp.imag);
+
+		let magnitude = this.mag(diff);
+		//Math.sqrt(tmp.real*tmp.real + tmp.imag*tmp.imag);
 		let randPlusMinus = Math.random() > 0.5 ? 1 : -1;
 		
-		result.real = Math.sqrt((magnitude + tmp.real)/2);
-		result.imag = (tmp.imag / Math.abs(tmp.imag)) * Math.sqrt((magnitude - tmp.real)/2);
-		return new Complex(randPlusMinus * result.real, randPlusMinus * result.imag);
+		result1.real = Math.sqrt((magnitude + diff.real)/2);
+		result1.imag = (diff.imag / Math.abs(diff.imag)) * Math.sqrt((magnitude - diff.real)/2);
+
+		let diff1real = result1.real - c.real;
+		let diff1imag = result1.imag - c.imag;
+
+		let diff2real = -result1.real - c.real;
+		let diff2imag = -result1.imag - c.imag;
+
+		let diff1Sq = diff1real * diff1real + diff1imag * diff1imag;
+		let diff2Sq = diff2real * diff2real + diff2imag * diff2imag;
+
+		
+		
+		//randPlusMinus = diff1Sq < diff2Sq ? 1 : -1;
+		
+		//randPlusMinus = 1;
+	
+
+
+		return new Complex(randPlusMinus * result1.real, randPlusMinus * result1.imag);
 	}
 }
 
@@ -134,7 +182,7 @@ class Buffer {
 	 * @returns oldest object in buffer.
 	 */
 
-	get tail() {
+	tail() {
 		let pointer = (this.head+this.length) % this.length;
 
 		let retVal = this.data[pointer];
@@ -145,6 +193,17 @@ class Buffer {
 			return retVal;
 		}
 	}
+}
+
+
+const myBuffer = new Buffer(10);
+
+for (let i = 0; i < 100; ++i ) {
+	myBuffer.insert(new Complex(i, i));
+	let tail = myBuffer.tail();
+
+	if (tail !== null) 
+		console.log(i, myBuffer.tail());
 }
 
 /**
@@ -188,7 +247,16 @@ class JuliaSetPoints {
 canvas.addEventListener("mousemove", function(event) {
 	mouse.x = event.x;
 	mouse.y = event.y;
-}) 
+})
+
+class ScreenPoint {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+}
+
+
 
 /**
  * A class representing the pointer on screen
@@ -230,9 +298,9 @@ function numericDisplayDraw() {
 
 // Create the pointer
 
-const BUFFLEN = 1000;
-let pointer = new Pointer();
-let buffer = new Buffer(BUFFLEN);
+const BUFFLEN = 125750;
+const pointer = new Pointer();
+const buffer = new Buffer(BUFFLEN);
 
 /**
  * The main "game loop". On each cycle update the necessary elements
@@ -246,9 +314,10 @@ let curr = new Complex(0, 0);
 let oldMouse = convertToScreenCoordinates(mouseComplex);
 
 // let currNum = new Complex(curr.x, curr.y);
-
+let counter = 0;
 
 function animate() {
+	
 	// ctx.clearRect(0,0, canvas.width, canvas.height);
 
 	// Update screen elements
@@ -256,60 +325,50 @@ function animate() {
 	pointer.update();
 	// pointer.draw();
 
-	let point = {};
+	// let point = {};
 
-	if (mouse.x != oldMouse.x || mouse.y != oldMouse.y) { 
-		
-		
+	
+	
+	
+	
+	// if (mouse.x != oldMouse.x || mouse.y != oldMouse.y) { 
+
 		oldMouse.x = mouse.x;
 		oldMouse.y = mouse.y;
 
 		
-		buffer.insert(oldMouse.x, oldMouse.x);
-		// Turn transparency on
-		
-		ctx.globalAlpha = 1;
-		ctx.fillStyle = "rgba(255, 255, 255, .3)";
-		ctx.beginPath();
-		ctx.arc(oldMouse.x, oldMouse.y, 10, 1, Math.PI * 2);
-		ctx.fill();
-		
-		// curr = convertFromScreenCoordinates(0, 0);
-
-		curr = new Complex(0,0);
+		buffer.insert(oldMouse);
+ 
 
 
-	} else {
 
 		mouseComplex = convertFromScreenCoordinates(oldMouse.x, oldMouse.y);
 
-
-
+		curr = new Complex(0,0);
 		ctx.globalAlpha = 1;
-		ctx.fillStyle = "rgba(255, 255, 255, .3)";
-		for (let i = 1; i <= 100; ++i) {
+		for (let i = 1; i <= 1000; ++i) {
 			curr = curr.next(mouseComplex);
 			let point = convertToScreenCoordinates(curr);
-			buffer.insert(point.x, point.y);
+			let tmp = new ScreenPoint(point.x, point.y);
+			buffer.insert(tmp);
+			ctx.fillStyle = "rgba(255, 255, 255, .9)";
 			ctx.beginPath();
-			ctx.arc(point.x, point.y, 10, .01, Math.PI * 2);
+			ctx.arc(point.x, point.y, 1, 0, Math.PI * 2);
 			ctx.fill();
+			let remove = buffer.tail();
 
-		}
-		
-	
+			
+			if (!(remove === null)) {
+				
+
+				ctx.fillStyle = "rgba(0, 0, 0, 1)";
+				ctx.beginPath();
+				ctx.arc(remove.x, remove.y, 1.3, 0, Math.PI * 2);
+				ctx.fill();
+			}
+
 	}
 
-	// Get the complex constant based on mouse position.
-	//let c = convertFromScreenCoordinates(mouse.x, mouse.y);
-	
-	// Create a set of points using inverse iteration
-	//let juliaSet = new JuliaSetPoints(c);
-	
-	// Draw the points
-	//juliaSet.draw();
-	
-	// Request new frame.
 	requestAnimationFrame(animate);
 }
 

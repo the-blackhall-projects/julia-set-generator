@@ -10,13 +10,21 @@
 	<title>The Internet Julia Set Generator</title>
 </head>
 <body>
-	<canvas id="canvas"></canvas>
+
+	<canvas id="canvas1"></canvas>
+	<canvas id="canvas2"></canvas>
+
 	
-	<div id="display-area">
-		Julia Set Generator: z<sub>n+1</sub> = z<sub>n</sub><sup>2</sup> + c<br>
-		with c = <span id="cx"></span> + i <span id="cy"></span><br>
-		Buffer length: <span id="bufflen"></span>
-	</div>
+	<main id="display-area">
+
+		<h3>Julia Set Generator</h3>
+		Formula: z<sub>n+1</sub> = z<sub>n</sub><sup>2</sup> + c<br>
+		with c = <span id="cvalue"></span>i<br>
+		<div id="err"></div>
+	</main>
+	<nav><a>What is this about?</a></nav>
+
+	<footer>Move mouse to generate interesting patterns.  </footer>
 	
 	<script src="assets/js/script.js"></script>
 </body>

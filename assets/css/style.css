@@ -7,17 +7,53 @@
 	box-sizing: border-box;
 }
 
+body {
+	color:white;
+}
+
+p {
+	color:white;
+}
+
+nav {
+	right:3rem;
+	position:absolute;
+	padding-top:0.8rem;
+
+}
+
 /* Format canvas area */
-#canvas {
+canvas {
 	position: absolute;
-	background: black;
+	background-color: transparent;
 	top: 0;
 	left: 0;
 }
 
 /* Style numeric display area */
-#display-area {
-	position:absolute;
+main {
 	color:white;
+	position:absolute;
+	display:block;
+	width:100%;
+	background-color:blue;
+	padding-bottom:0.8rem;
+	padding-top:0.8rem;
+	padding-left:0.8rem;
 }
 
+footer {
+	color:white;
+	position:absolute;
+	display:block;
+	width:100%;
+	background-color:blue;
+	padding-bottom:0.8rem;
+	padding-top:0.8rem;
+	padding-left:0.8rem;
+	bottom: 0;
+}
+
+#canvas1 {
+	background-color: black;
+}

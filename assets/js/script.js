@@ -1,40 +1,50 @@
 /**
- * A reference to the canvas object
+ * Obtain reference to the canvas object
  */
-const canvas = document.getElementById("canvas");
+const canvasFractal = document.getElementById("canvas1");
+const canvasMouse = document.getElementById("canvas2");
+canvasFractal.willReadFrequently = false;
+
 
 /**
- * Canvas context
+ * Obtain canvas context
  */
-const ctx = canvas.getContext("2d");
+const ctxFractal = canvasFractal.getContext("2d");
+
+
+const ctxMouse = canvasMouse.getContext("2d");
+
 
 /**
  * Runs upon resizing canvas.
  */
 function onWindowResize() {
-	// let minDimension = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+	canvasFractal.width = window.innerWidth;
+	canvasFractal.height = window.innerHeight;
+	canvasMouse.width = window.innerWidth;
+	canvasMouse.height = window.innerHeight;
 }
 window.addEventListener("resize", onWindowResize);
 
-// Perform one window resize
+// Perform one initial window resize
 onWindowResize();
 
 /**
  * A basic structure to hold mouse position
  */
-const mouse = {
-	x: canvas.width / 2,
-	y: canvas.height / 2,
+let mouse = {
+	x: canvasFractal.width / 2,
+	y: canvasFractal.height / 2,
 }
-
 
 /**
  * Simple class for complex numbers.  The full range
  * of operations for complex numbers is not implemented
  * here.  Apart from the constructur, one method is implemented
  * to create the next element in the reverse iteration.
+ * 
+ * Methods are also included to calculate the magnitude
+ * and square of the magnitude of a complex number.
  */
 class Complex {
 	constructor(real, imag) {
@@ -43,28 +53,20 @@ class Complex {
 	}
 
 	/**
-	 * Compute distance squared to another complex nu
-	 * @param {object} toComplexNum The other complex number 
-	 * @returns next number in sequence.
+	 * Compute square of magnitude of complex num
+	 * @param {object} complexNum A complex number 
+	 * @returns square of magnitude
 	 */
-	distSq(num1, num2) {
-
-
-		let distReal = num1.real - num2.real;
-		let distImag = num1.imag - num2.imag;
-
-		let distRealSq = distReal * distReal;
-		let distImagImag = distImag * distImag;
-
-		return distRealSq + distImagImag;
-
-	}
-
 	magSquared(complexNum) {
 		return complexNum.real * complexNum.real +
 			complexNum.imag * complexNum.imag;
 	}
 
+	/**
+	 * Compute magnitude of complex number
+	 * @param {object} complexNum A complex number 
+	 * @returns the magnitude
+	 */
 	mag(complexNum) {
 		return Math.sqrt(this.magSquared(complexNum));
 	}
@@ -75,42 +77,24 @@ class Complex {
 	 * @returns next number in sequence.
 	 */
 	next(c) {
-		let diff = {};
+		const diff = {};
 
-		let result1 = {};
-		let result2 = {};
+		const result1 = {};
 
 		diff.real = this.real - c.real;
 		diff.imag = this.imag - c.imag;
 
-
-		let magnitude = this.mag(diff);
-		//Math.sqrt(tmp.real*tmp.real + tmp.imag*tmp.imag);
-		let randPlusMinus = Math.random() > 0.5 ? 1 : -1;
+		const magnitude = this.mag(diff);
 		
 		result1.real = Math.sqrt((magnitude + diff.real)/2);
-		result1.imag = (diff.imag / Math.abs(diff.imag)) * Math.sqrt((magnitude - diff.real)/2);
-
-		let diff1real = result1.real - c.real;
-		let diff1imag = result1.imag - c.imag;
-
-		let diff2real = -result1.real - c.real;
-		let diff2imag = -result1.imag - c.imag;
-
-		let diff1Sq = diff1real * diff1real + diff1imag * diff1imag;
-		let diff2Sq = diff2real * diff2real + diff2imag * diff2imag;
-
-		
-		
-		//randPlusMinus = diff1Sq < diff2Sq ? 1 : -1;
-		
-		//randPlusMinus = 1;
+		result1.imag = diff.imag / Math.abs(diff.imag) * Math.sqrt((magnitude - diff.real)/2);
 	
-
-
-		return new Complex(randPlusMinus * result1.real, randPlusMinus * result1.imag);
+		let plusMinus = Math.random() > 0.5 ? 1 : -1;
+	
+		return new Complex(plusMinus * result1.real, plusMinus * result1.imag);
 	}
 }
+
 
 /**
  * Converts screen coordinates to a complex number
@@ -119,19 +103,19 @@ class Complex {
  * @returns complex number
  */
 function convertFromScreenCoordinates(xPos, yPos) {
-	let height = window.innerHeight;
-	let width = window.innerWidth;
 
-	let minDimension = (width < height) ? width : height;
-	result = {}
+	// For the purposes of scalign the image,
+	// calculate the minimum of window height vs width.
 
-	result = new Complex()
-	let x = (xPos - width / 2) * 4 / minDimension ;	
-	let y = - (yPos - height / 2) * 4 / minDimension;
+	const height = window.innerHeight;
+	const width = window.innerWidth;
 
-	retVal = new Complex(x, y);
+	const minDimension = (width < height) ? width : height;
 	
-	return retVal;
+	const x = (xPos - width / 2) * 4 / minDimension ;	
+	const y = - (yPos - height / 2) * 4 / minDimension;
+
+	return new Complex(x, y);;
 }
 
 /**
@@ -139,20 +123,19 @@ function convertFromScreenCoordinates(xPos, yPos) {
  * @param {Complex} point a complex number
  * @returns screen coordinates object
  */
-function convertToScreenCoordinates(point) {
+function convertToScreenCoordinates(complexNum) {
 
-	let height = window.innerHeight;
-	let width = window.innerWidth;
+	const height = window.innerHeight;
+	const width = window.innerWidth;
 
-	let minDimension = (width < height) ? width : height;
+	const minDimension = (width < height) ? width : height;
 
-	let result = {};
-	result.x = width / 2 + (point.real) * minDimension / 4 ;	
-	result.y = height / 2 + (- point.imag) * minDimension / 4 ;
+	const result = {};
+	result.x = Math.trunc(width / 2 + (complexNum.real) * minDimension / 4);
+	result.y = Math.trunc(height / 2 + (- complexNum.imag) * minDimension / 4);
 
-	return result;
+	return result; 
 }
-
 
 
 /**
@@ -181,11 +164,9 @@ class Buffer {
 	 * Returns the end object in the buffer.
 	 * @returns oldest object in buffer.
 	 */
-
 	tail() {
-		let pointer = (this.head+this.length) % this.length;
 
-		let retVal = this.data[pointer];
+		const retVal = this.data[(this.head+this.length) % this.length];
 
 		if (typeof retVal === "undefined") {
 			return null;
@@ -196,70 +177,17 @@ class Buffer {
 }
 
 
-const myBuffer = new Buffer(10);
-
-for (let i = 0; i < 100; ++i ) {
-	myBuffer.insert(new Complex(i, i));
-	let tail = myBuffer.tail();
-
-	if (tail !== null) 
-		console.log(i, myBuffer.tail());
-}
-
-/**
- * Holds a set of points in the Julia set based on reverse iteration.
- */
-class JuliaSetPoints {
-	/**
-	 * Creates an array of complex numbers that form the sequence.
-	 * @param {*} c The complex constant C in the formula
-	 */
-	constructor(c) {
-		this.z = new Complex(1,1);
-		this.c = c;
-		this.points = [];
-		let z = this.z;
-		for (let i = 0; i < 30000; ++i) {
-			z = z.next(c);	
-			this.points.push( z );
-		}
-	}
-
-	/**
-	 * Draw the sequence of points on the screen
-	 */
-	draw() {
-		//ctx.fillStyle = "white";
-		ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-
-		for (let point of this.points) {
-			let screenCoords = convertToScreenCoordinates(point);
-			ctx.beginPath();
-			ctx.arc(screenCoords.x, screenCoords.y, 1, 0, Math.PI * 2);
-	    	// ctx.fill();
-		}
-	}
-}
-
 /**	
  * Update mouse pointer when mouse moves.
  */
-canvas.addEventListener("mousemove", function(event) {
+canvasMouse.addEventListener("mousemove", function(event) {
 	mouse.x = event.x;
 	mouse.y = event.y;
 })
 
-class ScreenPoint {
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-	}
-}
-
-
 
 /**
- * A class representing the pointer on screen
+ * A class representing the pointer circle on screen
  */
 class Pointer {
 	constructor() {
@@ -280,10 +208,15 @@ class Pointer {
 	 * Draw the pointer
 	 */
 	draw() {
-		ctx.fillStyle = "blue";
-		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-	    ctx.fill();
+		ctxMouse.clearRect(0, 0, canvasMouse.width, canvasMouse.height); 
+		ctxMouse.fillStyle = "red";
+		ctxMouse.beginPath();
+		ctxMouse.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		ctxMouse.font = "1.4rem Arial";
+		
+		const complexNum = convertFromScreenCoordinates(this.x, this.y);
+		ctxMouse.fillText("  c = "  +complexNum.real.toFixed(1)+" "+ (complexNum.imag>=0?"+ ":"- ") +Math.abs(complexNum.imag).toFixed(1)+"i" ,this.x,this.y);
+	    ctxMouse.fill();
 	}
 }
 
@@ -291,86 +224,76 @@ class Pointer {
  * Update the numberic disply in top right corner.
  */
 function numericDisplayDraw() {
-	let result = convertFromScreenCoordinates(mouse.x, mouse.y);
-	document.getElementById("cx").innerHTML = result.real.toFixed(1);
-	document.getElementById("cy").innerHTML = result.imag.toFixed(1);
+	const result = convertFromScreenCoordinates(mouse.x, mouse.y);
+	document.getElementById("cvalue").innerHTML = result.real.toFixed(1)+" "+ (result.imag>=0?"+ ":"- ") +Math.abs(result.imag).toFixed(1);
 }
 
-// Create the pointer
+const initMouse = convertToScreenCoordinates(new Complex(-0.6, 0.4));
 
-const BUFFLEN = 125750;
+mouse = initMouse;
+
+// document.getElementById("err").innerHTML = pointx.x;
+
+
+
+// Having set up functions and classes, now proceed to the main animation code.
+
+// Create pointer representing mouse position on screen
 const pointer = new Pointer();
+
+// Set up a buffer representing the number of points on screen
+const BUFFLEN = 105750;
 const buffer = new Buffer(BUFFLEN);
+
+
+// curr represents the current complex number in the inverse iteration.
+// This is updated each time a point is plotted.
+let curr = new Complex(0, 0);
 
 /**
  * The main "game loop". On each cycle update the necessary elements
  */
-
-
-
-let mouseComplex = new Complex(0, 0);
-let curr = new Complex(0, 0);
-
-let oldMouse = convertToScreenCoordinates(mouseComplex);
-
-// let currNum = new Complex(curr.x, curr.y);
-let counter = 0;
+let cnt = 0;
 
 function animate() {
-	
-	// ctx.clearRect(0,0, canvas.width, canvas.height);
 
 	// Update screen elements
 	numericDisplayDraw();
+	
+	// Update pointer position
 	pointer.update();
-	// pointer.draw();
+	pointer.draw();
 
-	// let point = {};
+	// Get complex number representation of mouse position
+	const mouseComplex = convertFromScreenCoordinates(mouse.x, mouse.y);
 
-	
-	
-	
-	
-	// if (mouse.x != oldMouse.x || mouse.y != oldMouse.y) { 
+	curr = new Complex(0.0,0.0000001);
 
-		oldMouse.x = mouse.x;
-		oldMouse.y = mouse.y;
+	for (let i = 1; i <= 1000; ++i) {
+		curr = curr.next(mouseComplex);
+		const point = convertToScreenCoordinates(curr);
 
+		buffer.insert(point);
+		ctxFractal.fillStyle = "white";
+
+		// Draw the new dot
+		ctxFractal.fillRect(point.x, point.y, 1, 1);
 		
-		buffer.insert(oldMouse);
- 
-
-
-
-		mouseComplex = convertFromScreenCoordinates(oldMouse.x, oldMouse.y);
-
-		curr = new Complex(0,0);
-		ctx.globalAlpha = 1;
-		for (let i = 1; i <= 1000; ++i) {
-			curr = curr.next(mouseComplex);
-			let point = convertToScreenCoordinates(curr);
-			let tmp = new ScreenPoint(point.x, point.y);
-			buffer.insert(tmp);
-			ctx.fillStyle = "rgba(255, 255, 255, .9)";
-			ctx.beginPath();
-			ctx.arc(point.x, point.y, 1, 0, Math.PI * 2);
-			ctx.fill();
-			let remove = buffer.tail();
-
+		// Obtain oldest point in buffer
+		const remove = buffer.tail();
 			
-			if (!(remove === null)) {
-				
-
-				ctx.fillStyle = "rgba(0, 0, 0, 1)";
-				ctx.beginPath();
-				ctx.arc(remove.x, remove.y, 1.3, 0, Math.PI * 2);
-				ctx.fill();
-			}
-
+		// Remove old point if it exists
+		if (!(remove === null)) {
+			
+			// Paint pixel black 
+			ctxFractal.fillStyle = "black";
+			ctxFractal.fillRect((remove.x), (remove.y), 1, 1);
+		}
 	}
 
+	// Display next frame
 	requestAnimationFrame(animate);
 }
 
-// Start the animation
+// Start the animation!
 animate();
